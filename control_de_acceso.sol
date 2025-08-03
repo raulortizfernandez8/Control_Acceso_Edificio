@@ -10,6 +10,8 @@ pragma solidity 0.8.24;
 contract ControlDeAccesoEdificio {
     address public administrador;
 
+    // Variables
+
     struct Persona {
         bool autorizada;
         string puesto;
@@ -23,12 +25,16 @@ contract ControlDeAccesoEdificio {
     mapping(address => Persona) public autorizados;
     mapping(address => RegistroAcceso[]) public historialAccesos;
 
+    // Events
+
     event AccesoRegistrado(address indexed persona, bool esEntrada, uint256 timestamp);
     event AutorizacionCambiada(address indexed persona, bool autorizada);
 
     constructor() {
         administrador = msg.sender;
     }
+
+    // Modifiers
 
     modifier soloAdmin() {
         require(msg.sender == administrador, "Solo el administrador puede hacer esto");
@@ -39,6 +45,8 @@ contract ControlDeAccesoEdificio {
         require(autorizados[msg.sender].autorizada, "No estas autorizado");
         _;
     }
+
+    // Funciones external
 
     function autorizarPersona(address _persona, string memory _oficio) public soloAdmin {
         autorizados[_persona] = Persona(true,_oficio);
